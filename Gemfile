@@ -15,7 +15,6 @@ gem 'rb-readline'
 
 group :development, :test do
   gem 'byebug', platform: :mri
-  gem 'pry-rails'
   gem 'faker'
 end
 
