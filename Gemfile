@@ -13,6 +13,7 @@ gem 'active_model_serializers', '~> 0.10.0'
 gem 'rack-cors'
 gem 'rb-readline'
 gem 'rack-attack'
+gem 'pundit'
 
 group :development, :test do
   gem 'byebug', platform: :mri

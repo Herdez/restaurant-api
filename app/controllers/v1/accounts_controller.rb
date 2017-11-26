@@ -1,6 +1,9 @@
 module V1
   class AccountsController < ApplicationController
-    before_action :set_account, only: [:show, :destroy, :update]
+    skip_before_action :authenticate_admin, only: [:return_account, :borrow]
+    before_action :authenticate, only: [:return_account, :borrow]
+    before_action :current_user_presence, only: [:return_account, :borrow]
+    before_action :set_account, only: [:show, :destroy, :update, :borrow, :return_account]
  
     def index
       accounts = Account.preload(:user).paginate(page: params[:page])
@@ -32,6 +35,25 @@ module V1
       @account.destroy
       head 204
     end
+
+    def borrow
+      if @account.borrow(current_user)
+        render json: @account, adapter: :json, status: 200
+      else
+        render json: { error: 'Cannot borrow this account.' }, status: 422
+      end
+    end
+
+    def return_account
+      authorize(@account)
+
+      if @account.return_account(current_user)
+        render json: @account, adapter: :json, status: 200
+      else
+        render json: { error: 'Cannot return this account.' }, status: 422
+      end
+    end
+
  
     private
  
